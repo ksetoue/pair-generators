@@ -3,7 +3,7 @@ package main
 import "fmt"
 
 // mask that takes out the least significant 16 bits
-const filter = 0xFFFF
+const mask = 0xFFFF
 
 // a struct that defines a generator
 type generator struct {
@@ -16,14 +16,14 @@ func (g *generator) NextValue() uint64 {
 	return g.value
 }
 
-// function that count the number of matching pairs in a set of n pairs
-func countMatches(n int, a, b generator) int {
+// CountMatches returns the number of matching pairs in a set of n pairs
+func CountMatches(n int, a, b generator) int {
 	var count int // starts count as 0
 
 	// loop through the values generated
 	for i := 0; i < n; i++ {
 		// if the least significant bits match, increase count
-		if a.NextValue()&filter == b.NextValue()&filter {
+		if a.NextValue()&mask == b.NextValue()&mask {
 			count++
 		}
 	}
@@ -34,7 +34,7 @@ func countMatches(n int, a, b generator) int {
 func main() {
 	a := generator{16807, 65}
 	b := generator{48271, 8921}
-	result := countMatches(40000000, a, b)
+	result := CountMatches(40000000, a, b)
 
 	fmt.Println("Number of matching pairs: ", result)
 }
